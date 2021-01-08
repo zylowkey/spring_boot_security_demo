@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.goldcard.springboot_security_demo.mapper.StudentMapper">
+    <select id="getStudent" parameterType="long" resultType="stu">
+        <!-- 配置文件未配置驼峰映射，这里的列名跟POJO属性一致 -->
+        select id,student_name as studentName,note from t_student
+        <!-- 配置文件配置驼峰映射，这里的列名跟POJO属性无需一致 -->
+        <!-- select id,student_name,note from t_student-->
+        where id = #{id}
+    </select>
+
+    <insert id="insertStudent" useGeneratedKeys="true" keyProperty="id" parameterType="stu">
+        insert into t_student(student_name,note) values(#{studentName},#{note})
+    </insert>
+
+    <update id="updateStudent">
+        update t_student
+        <set>
+            <if test="studentName != null">
+                student_name = #{studentName},
+            </if>
+            <if test="note != null">
+                note = #{note}
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <select id="findStudents" resultType="stu">
+        select id,student_name,note from t_student
+        <where>
+            <if test="studentName != null">
+                and student_name = #{studentName}
+            </if>
+            <if test="note != null">
+                and note = #{note}
+            </if>
+        </where>
+    </select>
+
+    <delete id="deleteStudent" parameterType="long">
+        delete from  t_student where id = #{id}
+    </delete>
+</mapper>
