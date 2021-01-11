@@ -15,6 +15,12 @@ public class Student implements Serializable {
     public Student() {
     }
 
+    public Student(Long id, String studentName, String note) {
+        this.id = id;
+        this.studentName = studentName;
+        this.note = note;
+    }
+
     public Long getId() {
         return id;
     }

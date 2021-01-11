@@ -2,6 +2,7 @@ package com.goldcard.springboot_security_demo;
 
 import com.goldcard.springboot_security_demo.service.impl.UserDetailsServiceImpl;
 import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.amqp.core.Queue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
@@ -268,5 +269,25 @@ public class SpringbootSecurityDemoApplication extends WebSecurityConfigurerAdap
                 //自定义登出界面和默认跳转路径
                 .and().logout().logoutUrl("/logout/pge")
                 .logoutSuccessUrl("/welcome");
+    }
+
+    // 消息队列名称
+    @Value("${rabbitmq.queue.msg}")
+    private String msgQueueName = null;
+
+    // 用户队列名称
+    @Value("${rabbitmq.queue.user}")
+    private String userQueueName = null;
+
+    @Bean
+    public Queue createQueueMsg() {
+        // 创建字符串消息队列，boolean值代表是否持久化消息
+        return new Queue(msgQueueName, true);
+    }
+
+    @Bean
+    public Queue createQueueUser() {
+        // 创建用户消息队列，boolean值代表是否持久化消息
+        return new Queue(userQueueName, true);
     }
 }
